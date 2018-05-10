@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LoginActivity"
+    android:orientation="vertical"
+    android:background="#fff">
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/GeneralEditText"
+        android:hint="Email"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="300dp"
+        android:inputType="textPassword"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Password"
+        android:layout_gravity="center"
+        style="@style/GeneralEditText"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_marginTop="25dp"
+        android:layout_width="300dp"
+        android:text="Login"
+        android:layout_height="wrap_content"
+        style="@style/GeneralButton"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/new_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create New Account"
+        android:textAllCaps="false"
+        android:layout_gravity="center"
+        android:textColor="#b0c9da"
+        style="@style/BorderlessButton"/>
+
+</LinearLayout>

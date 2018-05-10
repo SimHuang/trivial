@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".activities.CreateAccountActivity"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:hint="Username"
+        style="@style/GeneralEditText"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:paddingVertical="12dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        style="@style/GeneralEditText"
+        app:layout_constraintTop_toBottomOf="@+id/username"/>
+
+    <EditText
+        android:id="@+id/passwordAgain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:paddingVertical="12dp"
+        android:hint="Password Again"
+        android:inputType="textPassword"
+        style="@style/GeneralEditText"
+        app:layout_constraintTop_toBottomOf="@+id/password"/>
+
+    <Button
+        android:id="@+id/create_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:text="Create Account"
+        android:paddingVertical="12dp"
+        style="@style/GeneralButton"
+        app:layout_constraintTop_toBottomOf="@+id/passwordAgain"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/create_account"
+        android:background="#fff">
+
+        <Button
+            android:id="@+id/log_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already Have Account? Log In."
+            android:textAllCaps="false"
+            android:textColor="#b0c9da"
+            android:layout_centerHorizontal="true"
+            style="@style/BorderlessButton"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

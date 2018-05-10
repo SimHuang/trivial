@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1045580526729",
+    "firebase_url": "https://trivial-simhuang-1314.firebaseio.com",
+    "project_id": "trivial-simhuang-1314",
+    "storage_bucket": "trivial-simhuang-1314.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045580526729:android:2f70374d8c4cd8d2",
+        "android_client_info": {
+          "package_name": "com.simhuang.trivial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1045580526729-bpidm67sdng7ik0c25a90gs10ju7500l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClBBOc-4_8Hqsosgha3r9p1xOl0cG_FDI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

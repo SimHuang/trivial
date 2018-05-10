@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Trivial</string>
+    <string name="account_setup">Account Setup</string>
+</resources>
