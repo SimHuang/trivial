@@ -10,28 +10,31 @@
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="20dp"
         android:layout_height="wrap_content"
         style="@style/GeneralEditText"
         android:hint="Email"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"/>
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:inputType="textPassword"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
         android:hint="Password"
         android:layout_gravity="center"
         style="@style/GeneralEditText"/>
 
     <Button
         android:id="@+id/login"
-        android:layout_marginTop="25dp"
-        android:layout_width="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:text="Login"
+        android:layout_marginHorizontal="20dp"
         android:layout_height="wrap_content"
         style="@style/GeneralButton"
         android:layout_gravity="center"/>

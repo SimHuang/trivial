@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
                 goToCreateAccountActivity();
             }
         });
-
     }
 
     /**
