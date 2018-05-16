@@ -8,6 +8,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.simhuang.trivial.R;
 
 /**
@@ -17,6 +19,7 @@ import com.simhuang.trivial.R;
  */
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
     Button loginButton;
     Button createAccountButton;
 
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
         loginButton = findViewById(R.id.login);
         createAccountButton = findViewById(R.id.create_account);
 
@@ -45,6 +49,21 @@ public class MainActivity extends AppCompatActivity {
                 createAccount();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            goToHomeActivity();
+        }
+    }
+
+    public void goToHomeActivity() {
+        Intent intent = new Intent(this, UserHomeActivity.class);
+        startActivity(intent);
     }
 
     /**
