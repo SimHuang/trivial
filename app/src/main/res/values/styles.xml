@@ -11,6 +11,9 @@
     <style name="GeneralActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/colorSeaGreen</item>
     </style>
+    <style name="MainActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@color/colorLightBlue</item>
+    </style>
     <!-- Custom Buttons -->
     <style name="GeneralButton" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">150dp</item>
@@ -27,5 +30,9 @@
         <item name="android:background">@drawable/round_edittext</item>
         <item name="android:padding">14dp</item>
         <item name="android:textSize">15dp</item>
+    </style>
+    <!-- bottom navigatio -->
+    <style name="BottomNavigation" >
+        <item name="android:background">@color/colorSeaGreen</item>
     </style>
 </resources>

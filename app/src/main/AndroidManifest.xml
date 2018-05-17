@@ -21,15 +21,14 @@
         <activity
             android:name=".activities.CreateAccountActivity"
             android:label="@string/account_setup"
-            android:theme="@style/GeneralActionBar">
-        </activity>
+            android:theme="@style/GeneralActionBar" />
         <activity
             android:name=".activities.LoginActivity"
             android:label="Account Login"
-            android:theme="@style/GeneralActionBar">
-        </activity>
-        <activity android:name=".activities.UserHomeActivity"
-            android:label="My Home"
+            android:theme="@style/GeneralActionBar" />
+        <activity
+            android:name=".activities.UserHomeActivity"
+            android:label="Home"
             android:theme="@style/GeneralActionBar">
         </activity>
     </application>

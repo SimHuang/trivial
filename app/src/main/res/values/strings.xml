@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Trivial</string>
     <string name="account_setup">Account Setup</string>
+    <string name="setting">Setting</string>
+    <string name="game">game</string>
+    <string name="friends">friends</string>
+    <string name="profile">profile</string>
 </resources>
