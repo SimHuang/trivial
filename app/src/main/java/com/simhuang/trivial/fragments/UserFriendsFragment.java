@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 import com.simhuang.trivial.R;
 
-public class UserProfileFragment extends Fragment {
+public class UserFriendsFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_friends, container, false);
         return view;
     }
 }

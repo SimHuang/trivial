@@ -1,7 +1,9 @@
 package com.simhuang.trivial.activities;
 
+import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,8 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.simhuang.trivial.R;
+import com.simhuang.trivial.fragments.LeaderboardFragment;
+import com.simhuang.trivial.fragments.UserFriendsFragment;
+import com.simhuang.trivial.fragments.UserProfileFragment;
+import com.simhuang.trivial.fragments.UserSettingFragment;
 
+/**
+ * This is the main activity once a user successfully log on to the app.
+ * The user can see their profile, various stats, and play a trivia
+ * game from this screen.
+ */
 public class UserHomeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -35,7 +47,10 @@ public class UserHomeActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
+        setInitialLoadedFragment();
+
         NavigationView navigationView = findViewById(R.id.nav_drawer);
+        navigationView.setCheckedItem(R.id.profile);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -53,23 +68,53 @@ public class UserHomeActivity extends AppCompatActivity {
      * Determine the action to take if one of the nagivation drawer item has been clicked.
      */
     public void determineNavigationOnClick(MenuItem item) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         switch (item.getItemId()) {
 
             case R.id.setting:
+                UserSettingFragment userSettingFragment = new UserSettingFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userSettingFragment);
+                fragmentTransaction.commit();
                 break;
 
             case R.id.profile:
+                UserProfileFragment userProfileFragment = new UserProfileFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
+                fragmentTransaction.commit();
                 break;
 
             case R.id.leaderboard:
+                LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
+                fragmentTransaction.replace(R.id.fragment_container, leaderboardFragment);
+                fragmentTransaction.commit();
+                break;
+
+            case R.id.friends:
+                UserFriendsFragment userFriendsFragment = new UserFriendsFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userFriendsFragment);
+                fragmentTransaction.commit();
                 break;
 
             case R.id.game:
+                //TODO: GO TO START GAME ACTIVITY
                 break;
 
             default:
                 break;
         }
+    }
+
+    /**
+     * This is the first screen user should see once they log in
+     */
+    public void setInitialLoadedFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        UserProfileFragment userProfileFragment = new UserProfileFragment();
+        fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
+        fragmentTransaction.commit();
     }
 
 //    @Override

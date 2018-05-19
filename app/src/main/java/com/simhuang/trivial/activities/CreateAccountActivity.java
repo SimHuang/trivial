@@ -112,7 +112,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     public void saveUserAndGoHome() {
         String username = usernameEditText.getText().toString();
         int token = 1000;
-        User user = new User(username, emailEditText.getText().toString(), null, null, null,token);
+        User user = new User(username, emailEditText.getText().toString(), null, null, null,token,0,0,0);
         mDatabase.child("Users").child(username).setValue(user);
 
         Intent intent = new Intent(this, UserHomeActivity.class);
