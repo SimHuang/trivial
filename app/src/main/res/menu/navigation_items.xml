@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/profile"
+            app:showAsAction="always"
+            android:title="Profile"
+            android:icon="@drawable/icon_person" />
+
+        <item android:id="@+id/game"
+            android:title="Play"
+            android:icon="@drawable/icon_game"
+            app:showAsAction="always"/>
+
+        <item android:id="@+id/friends"
+            android:title="Friends"
+            android:icon="@drawable/icon_group"
+            app:showAsAction="always"/>
+
+        <item android:id="@+id/leaderboard"
+            app:showAsAction="always"
+            android:title="Leaderboard"
+            android:icon="@drawable/icon_score"/>
+
+        <item android:id="@+id/setting"
+            app:showAsAction="always"
+            android:title="Setting"
+            android:icon="@drawable/icon_setting" />
+    </group>
+</menu>

@@ -29,7 +29,7 @@
         <activity
             android:name=".activities.UserHomeActivity"
             android:label="Home"
-            android:theme="@style/GeneralActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
     </application>
 
