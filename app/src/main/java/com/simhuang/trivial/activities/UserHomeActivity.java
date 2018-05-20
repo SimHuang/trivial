@@ -1,5 +1,6 @@
 package com.simhuang.trivial.activities;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -101,9 +102,23 @@ public class UserHomeActivity extends AppCompatActivity {
                 //TODO: GO TO START GAME ACTIVITY
                 break;
 
+            case R.id.exit:
+                userLogout();
+                break;
+
             default:
                 break;
         }
+    }
+
+    /**
+     * Log user out of the app and return to the main
+     * login/create account splash screen
+     */
+    public void userLogout() {
+        mAuth.signOut();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -117,11 +132,11 @@ public class UserHomeActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.home_actionbar_items, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_actionbar_items, menu);
+        return true;
+    }
 
     /**
      * Method for handling all action bar item clicks
