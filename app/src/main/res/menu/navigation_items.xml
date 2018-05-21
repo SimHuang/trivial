@@ -27,5 +27,10 @@
             app:showAsAction="always"
             android:title="Setting"
             android:icon="@drawable/icon_setting" />
+
+        <item android:id="@+id/exit"
+            app:showAsAction="always"
+            android:title="exit"
+            android:icon="@drawable/icon_exit"/>
     </group>
 </menu>

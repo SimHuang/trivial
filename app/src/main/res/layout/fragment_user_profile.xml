@@ -1,13 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ac3d3d">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <View
+        android:id="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="230dp"
+        android:background="@color/colorDarkSeaGreen" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="User Profile"/>
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:elevation="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher_background"/>
+
+        <TextView
+            android:id="@+id/profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorUltrawhite"
+            android:text="simhuang"/>
+
+        <LinearLayout
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/profile_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_balance"
+                android:drawableTint="@color/colorSeaGreen"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:textColor="#a7a7a7"
+                android:text=" Tokens: 1000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/profile_gamesWon"
+                android:drawableLeft="@drawable/ic_win"
+                android:drawableTint="@color/colorSeaGreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20dp"
+                android:textColor="#a7a7a7"
+                android:text=" Won: 15"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/profile_gamesLost"
+                android:drawableLeft="@drawable/ic_lose"
+                android:drawableTint="@color/colorSeaGreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20dp"
+                android:textColor="#a7a7a7"
+                android:text=" Lost: 15"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -13,25 +13,35 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.R;
+import com.simhuang.trivial.firebaseUtils.UserUtils;
 import com.simhuang.trivial.fragments.LeaderboardFragment;
 import com.simhuang.trivial.fragments.UserFriendsFragment;
 import com.simhuang.trivial.fragments.UserProfileFragment;
 import com.simhuang.trivial.fragments.UserSettingFragment;
+import com.simhuang.trivial.model.User;
 
 /**
  * This is the main activity once a user successfully log on to the app.
  * The user can see their profile, various stats, and play a trivia
- * game from this screen.
+ * game from this screen. This class is also responsible for retrieving
+ * various web data for child fragments.
  */
 public class UserHomeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
     private Toolbar mActionBar;
+    private DatabaseReference mUserReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +91,7 @@ public class UserHomeActivity extends AppCompatActivity {
                 break;
 
             case R.id.profile:
-                UserProfileFragment userProfileFragment = new UserProfileFragment();
-                fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
-                fragmentTransaction.commit();
+                UserUtils.retrieveUserProfileData(getSupportFragmentManager());
                 break;
 
             case R.id.leaderboard:
@@ -111,6 +119,41 @@ public class UserHomeActivity extends AppCompatActivity {
         }
     }
 
+//    /**
+//     * Retrieves user profile data from the 'User' json node base on the uid.
+//     * The user object is passed into the profile fragment, and the profile fragment is rendered
+//     * on this activity.
+//     */
+//    public void retrieveUserProfileData() {
+//        String uid = mAuth.getCurrentUser().getUid();
+//        mUserReference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+//
+//        mUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//
+//                Bundle args = new Bundle();
+//                args.putInt("token", user.getToken());
+//                args.putInt("gamesWon", user.getGamesWon());
+//                args.putInt("gamesLost", user.getGamesLost());
+//                args.putString("username", user.getUsername());
+//
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                UserProfileFragment userProfileFragment = new UserProfileFragment();
+//                userProfileFragment.setArguments(args);
+//                fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
+//                fragmentTransaction.commit();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                //IGNORING FAILED DATABASE CALLS FOR NOW
+//            }
+//        });
+//    }
+
     /**
      * Log user out of the app and return to the main
      * login/create account splash screen
@@ -125,11 +168,7 @@ public class UserHomeActivity extends AppCompatActivity {
      * This is the first screen user should see once they log in
      */
     public void setInitialLoadedFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        UserProfileFragment userProfileFragment = new UserProfileFragment();
-        fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
-        fragmentTransaction.commit();
+        UserUtils.retrieveUserProfileData(getSupportFragmentManager());
     }
 
     @Override

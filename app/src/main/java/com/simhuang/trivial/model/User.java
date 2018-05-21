@@ -2,6 +2,7 @@ package com.simhuang.trivial.model;
 
 public class User {
 
+    private String uid;
     private String username;
     private String email;
     private String firstName;
@@ -14,8 +15,10 @@ public class User {
 
     public User() {}
 
-    public User(String username, String email, String firstName, String lastName, String bio, int token,
+    public User(String uid, String username, String email, String firstName, String lastName, String bio, int token,
                 int gameStreak, int gamesWon, int gamesLost) {
+
+        this.uid = uid;
         this.email = email;
         this.username = username;
         this.firstName = firstName;
@@ -25,6 +28,14 @@ public class User {
         this.gamesLost = gamesLost;
         this.gamesWon = gamesWon;
         this.gameStreak = gameStreak;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUsername() {

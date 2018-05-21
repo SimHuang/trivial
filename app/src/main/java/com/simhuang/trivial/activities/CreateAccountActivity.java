@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -107,13 +108,17 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     /**
-     * Save the username and go to user home screen after user have been authenticated
+     * Save the username and go to user home screen after user have been authenticated.
+     * The user json object is saved using the uid as the key.
      */
     public void saveUserAndGoHome() {
+        FirebaseUser newlyLoggedInUser = mAuth.getCurrentUser();
+        String uid = newlyLoggedInUser.getUid();
         String username = usernameEditText.getText().toString();
         int token = 1000;
-        User user = new User(username, emailEditText.getText().toString(), null, null, null,token,0,0,0);
-        mDatabase.child("Users").child(username).setValue(user);
+        User user = new User(uid, username, emailEditText.getText().toString(), null, null, null,token,0,0,0);
+
+        mDatabase.child("Users").child(uid).setValue(user);
 
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
@@ -132,7 +137,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     /**
-     * Create New User account
+     * Create New User account. Once the new user account has been successfully created, the
+     * user is also logged in and we can access the user data.
      */
     public void createNewAccount(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
