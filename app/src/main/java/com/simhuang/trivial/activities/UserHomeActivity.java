@@ -107,7 +107,7 @@ public class UserHomeActivity extends AppCompatActivity {
                 break;
 
             case R.id.game:
-                //TODO: GO TO START GAME ACTIVITY
+                startNewGame();
                 break;
 
             case R.id.exit:
@@ -161,6 +161,15 @@ public class UserHomeActivity extends AppCompatActivity {
     public void userLogout() {
         mAuth.signOut();
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Starts the game activity where user can choose the trivia
+     * topic and start a new game
+     */
+    public void startNewGame() {
+        Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 
