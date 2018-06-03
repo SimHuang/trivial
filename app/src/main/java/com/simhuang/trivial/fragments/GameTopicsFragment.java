@@ -37,7 +37,7 @@ public class GameTopicsFragment extends Fragment{
         Bundle arguments = getArguments();
         ArrayList<String> gameTopicsList = (ArrayList<String>) arguments.get("gameTopicsList");
 
-        mAdapter = new GameTopicsAdapter(gameTopicsList);
+        mAdapter = new GameTopicsAdapter(getContext(), gameTopicsList);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

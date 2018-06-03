@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
     android:orientation="vertical"
-    android:background="@color/colorSeaGreen"
+    android:background="#fff"
     tools:context=".activities.GameActivity">
 
 </LinearLayout>
