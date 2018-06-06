@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +43,7 @@ public class UserHomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
     private Toolbar mActionBar;
+//    private ProgressBar progressBar;
     private DatabaseReference mUserReference;
 
     @Override
@@ -57,6 +60,11 @@ public class UserHomeActivity extends AppCompatActivity {
         actionBar.setTitle("Home");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+//        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
+//        progressBar.setIndeterminate(true);
+//        progressBar.setVisibility(View.VISIBLE);
 
         setInitialLoadedFragment();
 
@@ -178,6 +186,7 @@ public class UserHomeActivity extends AppCompatActivity {
      */
     public void setInitialLoadedFragment() {
         UserUtils.retrieveUserProfileData(getSupportFragmentManager());
+//        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

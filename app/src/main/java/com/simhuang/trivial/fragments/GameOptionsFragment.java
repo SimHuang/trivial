@@ -23,7 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.R;
+import com.simhuang.trivial.async.TriviaNetworkCall;
 import com.simhuang.trivial.model.Game;
+import com.simhuang.trivial.model.MashapeResults;
+import com.simhuang.trivial.service.MashapeService;
+
+import retrofit2.Call;
 
 import static android.content.ContentValues.TAG;
 
@@ -95,11 +100,11 @@ public class GameOptionsFragment extends Fragment {
                 boolean gameFound = false;
                 for(DataSnapshot gameSnapshot: dataSnapshot.getChildren()) {
                     Game game = gameSnapshot.getValue(Game.class);
-                    if(!game.isInProgress()) {
+                    if(!game.getInProgress()) {
                         if(game.getBetAmount() == betAmount && game.getGameTopic().equals(topic)) {
                             //set the current user as the second player
                             mDatabaseReference.child("games").child(gameSnapshot.getKey()).child("playerTwo").setValue(currentUser.getUid());
-                            mDatabaseReference.child("games").child(gameSnapshot.getKey()).child("isInProgress").setValue(true);
+                            mDatabaseReference.child("games").child(gameSnapshot.getKey()).child("inProgress").setValue(true);
                             gameFound = true;
                             break;
                         }
@@ -120,18 +125,38 @@ public class GameOptionsFragment extends Fragment {
     }
 
     /**
-     * Create a new game option and store it into database
+     * Create a new game option and store it into database. This also makes a network
+     * request asynchrnously to retrieve questions.
      */
     public void createNewGame(String gameTopic, int betAmount) {
         Game game = new Game(false, currentUser.getUid(), null, gameTopic, betAmount, 0, null, null, null);
-        mDatabaseReference.child("games").push().setValue(game).addOnCompleteListener(new OnCompleteListener<Void>() {
+        final String key = mDatabaseReference.child("games").push().getKey();
+
+        /*
+        * Currently a initial game object gets constructed and pushed into database, after it it successfully
+        * stored in db then the questions are retrieved through a network request and push into database as well.
+        * This can use some refactoring by retrieving the questions first, construct the game object and push everything
+        * into database in one shot.
+        * */
+        mDatabaseReference.child("games").child(key).setValue(game).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(getContext(), "new game created", Toast.LENGTH_SHORT).show();
-                    //TODO:GO TO THE GAME WAITING FRAGMENT
+
+                    //pass key into async task for update
+                    retrieveTriviaQuestions(key);
                 }
             }
         });
+    }
+
+    /**
+     * retrieve questions through an async task and store questions in database
+     */
+    public void retrieveTriviaQuestions(String key) {
+        MashapeService mashapeService = MashapeService.retrofit.create(MashapeService.class);
+        Call<MashapeResults> results = mashapeService.getQuestions(10);
+        new TriviaNetworkCall(getContext(), key).execute(results);
     }
 }

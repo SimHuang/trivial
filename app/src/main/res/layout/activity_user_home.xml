@@ -9,8 +9,6 @@
     android:fitsSystemWindows="true"
     android:background="#E0F2F1">
 
-
-
     <LinearLayout
         android:id="@+id/content_frame"
         android:orientation="vertical"
@@ -25,12 +23,14 @@
             android:theme="@style/GeneralActionBar"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
+
         </android.support.v7.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+        </FrameLayout>
 
     </LinearLayout>
 

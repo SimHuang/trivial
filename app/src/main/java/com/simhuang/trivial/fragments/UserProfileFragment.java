@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.simhuang.trivial.R;
@@ -26,6 +27,7 @@ public class UserProfileFragment extends Fragment {
     private TextView tokens;
     private TextView gamesWon;
     private TextView gamesLost;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -37,6 +39,9 @@ public class UserProfileFragment extends Fragment {
         tokens = (TextView) view.findViewById(R.id.profile_token);
         gamesWon = (TextView) view.findViewById(R.id.profile_gamesWon);
         gamesLost = (TextView) view.findViewById(R.id.profile_gamesLost);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        progressBar.setVisibility(View.VISIBLE);
 
         Bundle args = getArguments();
         if(args != null) {
@@ -50,8 +55,9 @@ public class UserProfileFragment extends Fragment {
             tokens.setText(Integer.toString(token));
             gamesWon.setText(Integer.toString(won));
             gamesLost.setText(Integer.toString(lost));
-
         }
+
+        progressBar.setVisibility(View.INVISIBLE);
 
         return view;
     }

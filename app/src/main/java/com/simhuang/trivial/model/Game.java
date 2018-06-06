@@ -8,21 +8,21 @@ import java.util.List;
 public class Game {
 
 //    private String uid;
-    private boolean isInProgress;
+    private boolean inProgress;
     private String playerOne;
     private String playerTwo;
     private String gameTopic;
     private int betAmount;
     private int currentQuestion;
-    private List<Question> questions;
+    private List<MashapeQuestion> questions;
     private List<Boolean> playerOneAnswers;
     private List<Boolean> playerTwoAnswers;
 
-    public Game(boolean isInProgress, String playerOne, String playerTwo,
-                String gameTopic, int betAmount, int currentQuestion, List<Question> questions,
+    public Game(boolean inProgress, String playerOne, String playerTwo,
+                String gameTopic, int betAmount, int currentQuestion, List<MashapeQuestion> questions,
                 List<Boolean> playerOneAnswers, List<Boolean> playerTwoAnswers) {
 
-        this.isInProgress = isInProgress;
+        this.inProgress = inProgress;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.gameTopic = gameTopic;
@@ -43,12 +43,12 @@ public class Game {
 //        this.uid = uid;
 //    }
 
-    public boolean isInProgress() {
-        return isInProgress;
+    public boolean getInProgress() {
+        return inProgress;
     }
 
     public void setInProgress(boolean inProgress) {
-        isInProgress = inProgress;
+        this.inProgress = inProgress;
     }
 
     public String getPlayerOne() {
@@ -91,11 +91,11 @@ public class Game {
         this.currentQuestion = currentQuestion;
     }
 
-    public List<Question> getQuestions() {
+    public List<MashapeQuestion> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<MashapeQuestion> questions) {
         this.questions = questions;
     }
 
