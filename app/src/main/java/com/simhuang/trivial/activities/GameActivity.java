@@ -3,6 +3,7 @@ package com.simhuang.trivial.activities;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.simhuang.trivial.R;
 import com.simhuang.trivial.fragments.GameTopicsFragment;
@@ -26,13 +27,13 @@ public class GameActivity extends AppCompatActivity {
 
         //TODO: RETRIEVE GAME TOPICS LIST DYNAMICALLY
         ArrayList<String> gameTopics = new ArrayList<String>();
+        gameTopics.add("Biology");
         gameTopics.add("Computer Science");
         gameTopics.add("History");
         gameTopics.add("Movies");
-        gameTopics.add("Law");
-        gameTopics.add("Biology");
         gameTopics.add("Physics");
-
+        gameTopics.add("Random");
+        gameTopics.add("Statistics");
 
         //load the game topics fragment
         GameTopicsFragment gameTopicsFragment = new GameTopicsFragment();
@@ -42,5 +43,16 @@ public class GameActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, gameTopicsFragment);
         fragmentTransaction.commit();
+    }
+
+    /**
+     * Detect when the user clicks the back button
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(this, "you pressed the back button", Toast.LENGTH_SHORT).show();
+
+        //check which fragment the user is on and act accordingly
     }
 }

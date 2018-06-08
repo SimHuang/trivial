@@ -10,6 +10,8 @@ public class MashapeQuestion {
     private String category;
     List<String> chooices;
 
+    public MashapeQuestion() {}
+
     public MashapeQuestion(String questionType, String question, String answer, String category, List<String> chooices) {
         this.questionType = questionType;
         this.question = question;

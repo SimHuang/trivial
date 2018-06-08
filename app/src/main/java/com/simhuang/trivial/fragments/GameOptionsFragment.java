@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,11 +146,28 @@ public class GameOptionsFragment extends Fragment {
                 if(task.isSuccessful()) {
                     Toast.makeText(getContext(), "new game created", Toast.LENGTH_SHORT).show();
 
+                    //go to the game wait fragment
+                    goToGameWaitState();
+
                     //pass key into async task for update
                     retrieveTriviaQuestions(key);
                 }
             }
         });
+    }
+
+    /**
+     * This method launch the game wait fragment while user waits for second player
+     * and the loading of the questions. The application also waits until a broadcast indicates
+     * a user has joined his or her game
+     */
+    public void goToGameWaitState() {
+        FragmentTransaction fragmentTransaction = ((FragmentActivity)getContext())
+                .getSupportFragmentManager().beginTransaction();
+
+        GameWaitFragment gameWaitFragment = new GameWaitFragment();
+        fragmentTransaction.replace(R.id.fragment_container, gameWaitFragment);
+        fragmentTransaction.commit();
     }
 
     /**
