@@ -43,6 +43,7 @@ public class UserHomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
     private Toolbar mActionBar;
+    private NavigationView navigationView;
 //    private ProgressBar progressBar;
     private DatabaseReference mUserReference;
 
@@ -68,7 +69,7 @@ public class UserHomeActivity extends AppCompatActivity {
 
         setInitialLoadedFragment();
 
-        NavigationView navigationView = findViewById(R.id.nav_drawer);
+        navigationView = findViewById(R.id.nav_drawer);
         navigationView.setCheckedItem(R.id.profile);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -161,6 +162,12 @@ public class UserHomeActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        navigationView.setCheckedItem(R.id.profile);
+    }
 
     /**
      * Log user out of the app and return to the main
