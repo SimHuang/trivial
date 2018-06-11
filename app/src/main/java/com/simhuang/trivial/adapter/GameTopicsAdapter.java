@@ -66,7 +66,6 @@ public class GameTopicsAdapter extends RecyclerView.Adapter<GameTopicsAdapter.Vi
             @Override
             public void onClick(View v) {
                 String topic = viewHolder.textView.getText().toString();
-                Toast.makeText(mContext, topic, Toast.LENGTH_SHORT).show();
 
                 GameOptionsFragment gameOptionsFragment = new GameOptionsFragment();
                 Bundle args = new Bundle();

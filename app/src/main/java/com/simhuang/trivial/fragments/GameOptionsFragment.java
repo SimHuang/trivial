@@ -40,6 +40,7 @@ public class GameOptionsFragment extends Fragment {
     private FirebaseUser currentUser;
     private TextView mTopicTextView;
     private Button mStartButton;
+    private ValueEventListener newGameValueEventListener;
 
     @Nullable
     @Override
@@ -96,7 +97,7 @@ public class GameOptionsFragment extends Fragment {
           //this listener only listens for single event change
           currentLiveGames.addListenerForSingleValueEvent(new ValueEventListener() {
 
-            //search through all current games to find a matching game
+            //search through all current games to join a matching game
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean gameFound = false;
@@ -147,7 +148,7 @@ public class GameOptionsFragment extends Fragment {
                     Toast.makeText(getContext(), "new game created", Toast.LENGTH_SHORT).show();
 
                     //go to the game wait fragment
-                    goToGameWaitState();
+                    goToGameWaitState(key);
 
                     //pass key into async task for update
                     retrieveTriviaQuestions(key);
@@ -161,11 +162,15 @@ public class GameOptionsFragment extends Fragment {
      * and the loading of the questions. The application also waits until a broadcast indicates
      * a user has joined his or her game
      */
-    public void goToGameWaitState() {
+    public void goToGameWaitState(String key) {
         FragmentTransaction fragmentTransaction = ((FragmentActivity)getContext())
                 .getSupportFragmentManager().beginTransaction();
 
         GameWaitFragment gameWaitFragment = new GameWaitFragment();
+        Bundle args = new Bundle();
+        args.putString("gameKey", key);
+        gameWaitFragment.setArguments(args);
+
         fragmentTransaction.replace(R.id.fragment_container, gameWaitFragment);
         fragmentTransaction.commit();
     }

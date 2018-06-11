@@ -5,8 +5,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.model.Game;
 import com.simhuang.trivial.model.MashapeQuestion;
 import com.simhuang.trivial.model.MashapeResults;
@@ -41,9 +44,6 @@ public class TriviaNetworkCall extends AsyncTask<Call, Void, MashapeResults> {
      */
     @Override
     protected MashapeResults doInBackground(Call... calls) {
-
-        Log.d("doInBackground", "attempting to retrieve questions");
-
         try {
             Call<MashapeResults> call = calls[0];
             Response<MashapeResults> response = call.execute();
@@ -60,7 +60,6 @@ public class TriviaNetworkCall extends AsyncTask<Call, Void, MashapeResults> {
 
         Toast.makeText(context, mashapeResults.getResult().get(0).getQuestion(), Toast.LENGTH_SHORT).show();
         List<MashapeQuestion> triviaQuestions = mashapeResults.getResult();
-        Log.w("postExecute", gameKey);
         databaseReference.child("games").child(gameKey).child("questions").setValue(triviaQuestions);
     }
 }

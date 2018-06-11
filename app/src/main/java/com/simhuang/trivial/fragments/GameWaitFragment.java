@@ -1,16 +1,15 @@
 package com.simhuang.trivial.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +27,7 @@ public class GameWaitFragment extends Fragment{
 
     private DatabaseReference mDatabase;
     private ValueEventListener valueEventListener;
+    private Context mContext;
 
     @Nullable
     @Override
@@ -35,6 +35,7 @@ public class GameWaitFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_game_wait, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mContext = getContext();
 
         final String gameKey = getArguments().getString("gameKey");
 
@@ -54,7 +55,9 @@ public class GameWaitFragment extends Fragment{
                         args.putString("gameKey", gameKey);
                         gamePlayFragment.setArguments(args);
 
-                        FragmentTransaction fragmentTransaction = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction fragmentTransaction = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                        //TODO: WHEN SHOULD I USE getChildFragmentManager vs getSupportFragmentManager
+//                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragment_container, gamePlayFragment);
                         fragmentTransaction.commit();
 
@@ -72,6 +75,10 @@ public class GameWaitFragment extends Fragment{
         return view;
     }
 
+    /**
+     * This life cycle method is called when user clicks back button or
+     * the fragment is no longer visible.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
