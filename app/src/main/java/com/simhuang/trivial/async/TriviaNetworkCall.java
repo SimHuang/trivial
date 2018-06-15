@@ -57,8 +57,6 @@ public class TriviaNetworkCall extends AsyncTask<Call, Void, MashapeResults> {
     }
 
     protected void onPostExecute(MashapeResults mashapeResults) {
-
-        Toast.makeText(context, mashapeResults.getResult().get(0).getQuestion(), Toast.LENGTH_SHORT).show();
         List<MashapeQuestion> triviaQuestions = mashapeResults.getResult();
         databaseReference.child("games").child(gameKey).child("questions").setValue(triviaQuestions);
     }

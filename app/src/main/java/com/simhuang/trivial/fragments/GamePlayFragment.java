@@ -1,9 +1,15 @@
 package com.simhuang.trivial.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +27,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.R;
 import com.simhuang.trivial.model.Game;
 import com.simhuang.trivial.model.MashapeQuestion;
+import com.simhuang.trivial.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamePlayFragment extends Fragment implements View.OnClickListener{
 
+    private static DatabaseReference winnerRef = FirebaseDatabase.getInstance().getReference().child("Users");
+    private static DatabaseReference loserRef = FirebaseDatabase.getInstance().getReference().child("Users");
     private DatabaseReference mDatabase;
     private FirebaseUser firebaseUser;
     private ValueEventListener gamePlayValueEventListenerRef;
@@ -42,11 +51,13 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
     private Button choiceTwoBtn;
     private Button choiceThreeBtn;
     private Button choiceFourBtn;
+    private Context mContext;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_play, container, false);
+        Log.d("onCreateView", "Creating the onCreateView");
 
         timer = view.findViewById(R.id.timer);
         question = (TextView) view.findViewById(R.id.current_question);
@@ -68,11 +79,14 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         correctAnswers = 0;
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("games").child(gameKey);
+        mContext = getContext();
+
+
 
         //this listener is to reads all questions and choices in memory from Firebase.
         //The first question is also set in Firebase.
-        mDatabase.child("games").child(gameKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Game game = dataSnapshot.getValue(Game.class);
@@ -85,7 +99,6 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
 
                     questionsList = game.getQuestions();
                     changeQuestion(currentQuestion);
-
                 }
             }
 
@@ -95,10 +108,8 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        //This listener is used for the game play
-        gamePlayValueEventListenerRef = mDatabase.child("games")
-                .child(gameKey)
-                .addValueEventListener(gamePlayValueEventListener);
+        //This listener is used to determine when the game is complete and it will calculate who the winner is
+        gamePlayValueEventListenerRef = mDatabase.addValueEventListener(gamePlayValueEventListener);
 
         //TODO: ADD PERMANENT TIMER TO GAME PLAY. THE TIMER SHOULD BE RESET AFTER BOTH PLAYERS SELECTS ANSWERS OR TIME RUNS OUT
 
@@ -106,9 +117,14 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * This is the valueevent listener used for listening to all game play action.
+     * This is the value event listener used for listening to all game play action.
      * When a selects a answer choice the value event listener will be triggered saving
      * the answers.
+     *
+     * - compare both players wrong to right to determine winner
+     * - set the new token count for both players
+     * - delete the game object
+     * - set the new win/loss record for both players
      */
     ValueEventListener gamePlayValueEventListener = new ValueEventListener() {
         @Override
@@ -116,15 +132,132 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
             Game game = dataSnapshot.getValue(Game.class);
 
             if(game != null) {
-                //TODO: CHECK FOR UPDATED VALUE
+                //both players have completed the game and results are uploaded
+                if(game.getPlayerOneAnswers() != null && game.getPlayerTwoAnswers() != null) {
+                    int playerOneCorrectTally = 0;
+                    int playerTwoCorrectTally = 0;
+
+                    String playerOne = game.getPlayerOne();
+                    String playerTwo = game.getPlayerTwo();
+                    int betAmount = game.getBetAmount();
+
+                    List<Boolean> playerOneAnswers = game.getPlayerOneAnswers();
+                    List<Boolean> playerTwoAnswers = game.getPlayerTwoAnswers();
+
+                    for(int i = 0; i < playerOneAnswers.size(); i++) {
+                        if(playerOneAnswers.get(i)) {
+                            playerOneCorrectTally++;
+                        }
+
+                        if(playerTwoAnswers.get(i)) {
+                            playerTwoCorrectTally++;
+                        }
+                    }
+
+                    updatePlayerResults(playerOneCorrectTally, playerTwoCorrectTally, playerOne, playerTwo, betAmount);
+
+                    deleteFinishedGame();
+
+                    mDatabase.removeEventListener(this);
+
+
+//                    goToGameFinishFragment(playerOneCorrectTally, playerTwoCorrectTally);
+                }
             }
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-
+            //DOES NOT REQUIRE IMPLEMENTATION
         }
     };
+
+    /**
+     * Store players new token count and games won/loss in db
+     */
+    public void updatePlayerResults(int playerOneTally, int playerTwoTally, String playerOne, String playerTwo, final int betAmount) {
+
+        //the winnerRef and loserRef are global
+        if(playerOneTally == playerTwoTally) {  //tie game
+            return;
+
+        }else if(playerOneTally > playerTwoTally) {
+            winnerRef = winnerRef.child(playerOne);
+            loserRef = loserRef.child(playerTwo);
+
+        }else {
+            winnerRef = winnerRef.child(playerTwo);
+            loserRef = loserRef.child(playerOne);
+        }
+
+        //listener to update winning player
+        winnerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User player = dataSnapshot.getValue(User.class);
+
+                if(player != null) {
+                    int newToken = player.getToken() + betAmount;
+                    int gamesWon = player.getGamesWon() + 1;
+                    winnerRef.child("token").setValue(newToken);
+                    winnerRef.child("gamesWon").setValue(gamesWon);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //DOES NOT REQUIRE IMPLEMENTATION
+            }
+        });
+
+        //listener to update for losing player
+        loserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User player = dataSnapshot.getValue(User.class);
+
+                if(player != null) {
+                    if(player.getToken() != 0) {
+                        int newToken = player.getToken() - betAmount;
+                        loserRef.child("token").setValue(newToken);
+                    }
+
+                    int gamesLost = player.getGamesLost() + 1;
+                    loserRef.child("gamesLost").setValue(gamesLost);
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //DOES NOT REQUIRE IMPLEMENTATION
+            }
+        });
+
+    }
+
+    /**
+     * Delete the game that is finished
+     */
+    public void deleteFinishedGame() {
+        mDatabase.removeValue();
+    }
+
+    /**
+     *
+     */
+    public void goToGameFinishFragment(int playerOneCorrectTally, int playerTwoCorrectTally) {
+        GameFinishFragment gameFinishFragment = new GameFinishFragment();
+        Bundle args = new Bundle();
+        args.putInt("playerOneAnswersTally", playerOneCorrectTally);
+        args.putInt("playerTwoAnswersTally", playerTwoCorrectTally);
+        args.putBoolean("isPlayerone", isPlayerOne);
+        gameFinishFragment.setArguments(args);
+
+        FragmentTransaction fragmentTransaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, gameFinishFragment);
+        fragmentTransaction.commit();
+    }
 
     /**
      * Change questions when both user has selected an answer choice
@@ -159,7 +292,6 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
      */
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(), "you clicked on a button", Toast.LENGTH_SHORT).show();
 
         switch(v.getId()) {
 
@@ -185,6 +317,10 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Method to display the next question once a user has selected an answer
+     * @param v
+     */
     public void handlerAnswerSelection(View v) {
         disableButtonClick();
         String userAnswer = ((Button)v).getText().toString();
@@ -198,28 +334,37 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         }
 
         if(currentQuestion == 9) {
-            deteremineWinner();
+            determineWinner();
 
         }else {
             currentQuestion++;
+            changeQuestion(currentQuestion);
         }
-
-        changeQuestion(currentQuestion);
     }
 
     /**
      * Method to determine the winner and save all required data.
-     * - compare both players wrong to right to determine winner
-     * - set the new token count for both players
-     * - delete the game object
-     * - set the new win/loss record for both players
      */
-    public void deteremineWinner() {
-        Toast.makeText(getContext(), "You might have won", Toast.LENGTH_SHORT).show();
+    public void determineWinner() {
         if(isPlayerOne) {
-            mDatabase.child("games").child(gameKey).child("playerOneAnswers").setValue(playerAnswers);
+            mDatabase.child("playerOneAnswers").setValue(playerAnswers, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if(databaseError != null) {
+                        Log.d("GamePlay:P1saveResults", "Error saving same results");
+                    }
+                }
+            });
+
         }else {
-            mDatabase.child("games").child(gameKey).child("playerOneAnswers").setValue(playerAnswers);
+            mDatabase.child("playerTwoAnswers").setValue(playerAnswers, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if(databaseError != null) {
+                        Log.d("GamePlay:P2saveResults", "Error saving same results");
+                    }
+                }
+            });
         }
     }
 
@@ -246,6 +391,6 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mDatabase.removeEventListener(gamePlayValueEventListenerRef);
+//        mDatabase.removeEventListener(gamePlayValueEventListenerRef);
     }
 }

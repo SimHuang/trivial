@@ -167,6 +167,7 @@ public class UserHomeActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.setCheckedItem(R.id.profile);
+        UserUtils.retrieveUserProfileData(getSupportFragmentManager());
     }
 
     /**

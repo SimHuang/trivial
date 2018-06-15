@@ -109,6 +109,7 @@ public class GameOptionsFragment extends Fragment {
                             mDatabaseReference.child("games").child(gameSnapshot.getKey()).child("playerTwo").setValue(currentUser.getUid());
                             mDatabaseReference.child("games").child(gameSnapshot.getKey()).child("inProgress").setValue(true);
                             gameFound = true;
+                            goToGameRoom(gameSnapshot.getKey());
                             break;
                         }
                     }
@@ -128,8 +129,22 @@ public class GameOptionsFragment extends Fragment {
     }
 
     /**
+     * This starts the game play fragment when user found a matching room to join
+     */
+    public void goToGameRoom(String gameKey) {
+        GamePlayFragment gamePlayFragment = new GamePlayFragment();
+        Bundle args = new Bundle();
+        args.putString("gameKey", gameKey);
+        gamePlayFragment.setArguments(args);
+
+        FragmentTransaction fragmentTransaction = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, gamePlayFragment);
+        fragmentTransaction.commit();
+    }
+
+    /**
      * Create a new game option and store it into database. This also makes a network
-     * request asynchrnously to retrieve questions.
+     * request asynchronously to retrieve questions.
      */
     public void createNewGame(String gameTopic, int betAmount) {
         Game game = new Game(false, currentUser.getUid(), null, gameTopic, betAmount, 0, null, null, null);
@@ -145,7 +160,6 @@ public class GameOptionsFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
-                    Toast.makeText(getContext(), "new game created", Toast.LENGTH_SHORT).show();
 
                     //go to the game wait fragment
                     goToGameWaitState(key);
@@ -182,5 +196,10 @@ public class GameOptionsFragment extends Fragment {
         MashapeService mashapeService = MashapeService.retrofit.create(MashapeService.class);
         Call<MashapeResults> results = mashapeService.getQuestions(10);
         new TriviaNetworkCall(getContext(), key).execute(results);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
