@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -161,7 +162,7 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
                     mDatabase.removeEventListener(this);
 
 
-//                    goToGameFinishFragment(playerOneCorrectTally, playerTwoCorrectTally);
+                    goToGameFinishFragment(playerOneCorrectTally, playerTwoCorrectTally);
                 }
             }
         }
@@ -254,9 +255,12 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         args.putBoolean("isPlayerone", isPlayerOne);
         gameFinishFragment.setArguments(args);
 
-        FragmentTransaction fragmentTransaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, gameFinishFragment);
-        fragmentTransaction.commit();
+        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+        gameFinishFragment.show(fragmentManager, "gameFinshDialog");
+
+//        FragmentTransaction fragmentTransaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, gameFinishFragment);
+//        fragmentTransaction.commit();
     }
 
     /**
