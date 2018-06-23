@@ -1,6 +1,7 @@
 package com.simhuang.trivial.activities;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -29,6 +30,7 @@ import com.simhuang.trivial.firebaseUtils.UserUtils;
 import com.simhuang.trivial.fragments.LeaderboardFragment;
 import com.simhuang.trivial.fragments.UserFriendsFragment;
 import com.simhuang.trivial.fragments.UserProfileFragment;
+import com.simhuang.trivial.fragments.UserSearchFragment;
 import com.simhuang.trivial.fragments.UserSettingFragment;
 import com.simhuang.trivial.model.User;
 
@@ -96,6 +98,13 @@ public class UserHomeActivity extends AppCompatActivity {
             case R.id.setting:
                 UserSettingFragment userSettingFragment = new UserSettingFragment();
                 fragmentTransaction.replace(R.id.fragment_container, userSettingFragment);
+                fragmentTransaction.commit();
+                break;
+
+            case R.id.search:
+                UserSearchFragment userSearchFragment = new UserSearchFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userSearchFragment);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
 
