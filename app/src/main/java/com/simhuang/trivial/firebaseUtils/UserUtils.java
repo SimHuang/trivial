@@ -33,18 +33,20 @@ public class UserUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                Bundle args = new Bundle();
-                args.putInt("token", user.getToken());
-                args.putInt("gamesWon", user.getGamesWon());
-                args.putInt("gamesLost", user.getGamesLost());
-                args.putString("username", user.getUsername());
+                if (user != null) {
+                    Bundle args = new Bundle();
+                    args.putInt("token", user.getToken());
+                    args.putInt("gamesWon", user.getGamesWon());
+                    args.putInt("gamesLost", user.getGamesLost());
+                    args.putString("username", user.getUsername());
 
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                UserProfileFragment userProfileFragment = new UserProfileFragment();
-                userProfileFragment.setArguments(args);
-                fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
-                fragmentTransaction.commit();
+    //                FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    UserProfileFragment userProfileFragment = new UserProfileFragment();
+                    userProfileFragment.setArguments(args);
+                    fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
+                    fragmentTransaction.commit();
+                }
             }
 
             @Override

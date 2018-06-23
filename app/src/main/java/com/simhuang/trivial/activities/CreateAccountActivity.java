@@ -1,6 +1,7 @@
 package com.simhuang.trivial.activities;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.R;
 import com.simhuang.trivial.model.User;
+import com.simhuang.trivial.model.UserTag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -109,7 +114,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     /**
      * Save the username and go to user home screen after user have been authenticated.
-     * The user json object is saved using the uid as the key.
+     * The user json object is saved using the uid as the key. Create a user tag for user
+     * and save into database as well.
      */
     public void saveUserAndGoHome() {
         FirebaseUser newlyLoggedInUser = mAuth.getCurrentUser();
@@ -117,8 +123,30 @@ public class CreateAccountActivity extends AppCompatActivity {
         String username = usernameEditText.getText().toString();
         int token = 1000;
         User user = new User(uid, username, emailEditText.getText().toString(), null, null, null,token,0,0,0);
+        final UserTag newTag = new UserTag(username, uid, null);
 
         mDatabase.child("Users").child(uid).setValue(user);
+
+        //add user tag
+        mDatabase.child("UserTag").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<UserTag> userTagList = new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    UserTag userTag = snapshot.getValue(UserTag.class);
+                    userTagList.add(userTag);
+                }
+
+                userTagList.add(newTag);
+                mDatabase.child("UserTag").setValue(userTagList);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //DOES NOT REQUIRE IMPLEMENTATION
+            }
+        });
 
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
