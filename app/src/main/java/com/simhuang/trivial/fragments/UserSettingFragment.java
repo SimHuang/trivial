@@ -7,10 +7,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -42,7 +44,11 @@ import com.simhuang.trivial.model.UserTag;
 import com.squareup.picasso.Picasso;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -58,7 +64,9 @@ public class UserSettingFragment extends Fragment {
     private StorageReference storageRef;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
+
     private Uri imageFileURI;
+    private String mCurrentPhotoPath;
 
 
     @Nullable
@@ -154,7 +162,21 @@ public class UserSettingFragment extends Fragment {
     public void takePhoto() {
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(takePhotoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePhotoIntent, REQUEST_IMAGE_CAPTURE);
+
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+
+            }catch(IOException e) {
+                e.printStackTrace();
+
+            }
+
+            if(photoFile != null) {
+                imageFileURI = FileProvider.getUriForFile(getContext(), "com.simhuang.trivial.fileprovider", photoFile);
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileURI);
+                startActivityForResult(takePhotoIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
@@ -163,6 +185,11 @@ public class UserSettingFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             //TODO:REQUIRE IMPLEMENTATION
+            if(data != null) {
+//                imageFileURI = (Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);
+//                Toast.makeText(getContext(), imageFileURI.toString(), Toast.LENGTH_SHORT).show();
+                uploadImagetoFirebase();
+            }
 
         }else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
             if(data != null) {
@@ -254,5 +281,25 @@ public class UserSettingFragment extends Fragment {
         return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    /**
+     * Helper method which constructs file object from a captured image
+     * @return
+     * @throws IOException
+     */
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
 
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
 }

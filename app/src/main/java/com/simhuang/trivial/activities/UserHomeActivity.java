@@ -1,6 +1,7 @@
 package com.simhuang.trivial.activities;
 
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
