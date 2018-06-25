@@ -6,10 +6,12 @@
     android:gravity="bottom"
     android:layout_height="192dp">
     
-    <ImageView
-        android:id="@+id/profile_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/nav_header_profile_pic"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
 
     <TextView
         android:id="@+id/nav_header_username"
@@ -17,15 +19,17 @@
         android:layout_height="wrap_content"
         android:text="username"
         android:textColor="@color/colorUltrawhite"
-        android:paddingLeft="15dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="5dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
     <TextView
+        android:id="@+id/nav_head_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="email"
-        android:paddingLeft="15dp"
-        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
         android:textColor="@color/colorUltrawhite"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 

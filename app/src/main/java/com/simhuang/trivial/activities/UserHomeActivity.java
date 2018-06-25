@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +34,9 @@ import com.simhuang.trivial.fragments.UserProfileFragment;
 import com.simhuang.trivial.fragments.UserSearchFragment;
 import com.simhuang.trivial.fragments.UserSettingFragment;
 import com.simhuang.trivial.model.User;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * This is the main activity once a user successfully log on to the app.
@@ -45,9 +49,12 @@ public class UserHomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
     private Toolbar mActionBar;
+    private CircleImageView headerProfileImage;
+    private TextView usernameTextView;
+    private TextView emailTextView;
     private NavigationView navigationView;
 //    private ProgressBar progressBar;
-    private DatabaseReference mUserReference;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class UserHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_home);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDrawerLayout = findViewById(R.id.userhome_drawer_layout);
         mActionBar = findViewById(R.id.home_actionbar);
 
@@ -82,6 +90,34 @@ public class UserHomeActivity extends AppCompatActivity {
                 determineNavigationOnClick(item);
 
                 return true;
+            }
+        });
+        View headerView = navigationView.getHeaderView(0);
+        headerProfileImage = headerView.findViewById(R.id.nav_header_profile_pic);
+        usernameTextView = headerView.findViewById(R.id.nav_header_username);
+        emailTextView = headerView.findViewById(R.id.nav_head_email);
+
+        loadNavigationHeaderContent();
+    }
+
+    public void loadNavigationHeaderContent() {
+        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if(user != null) {
+                    usernameTextView.setText(user.getUsername());
+                    emailTextView.setText(user.getEmail());
+
+                    if(user.getImageURI() != null) {
+                        Picasso.get().load(user.getImageURI()).resize(100,100).centerCrop().into(headerProfileImage);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //IGNORED
             }
         });
     }

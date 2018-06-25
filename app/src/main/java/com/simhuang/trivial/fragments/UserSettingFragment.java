@@ -80,7 +80,34 @@ public class UserSettingFragment extends Fragment {
             }
         });
 
+        showExistingData();
+
         return view;
+    }
+
+    /**
+     * Retrieve all user setting from settings
+     */
+    public void showExistingData() {
+        mDatabase.child("UserTag").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    UserTag userTag = snapshot.getValue(UserTag.class);
+                    if(userTag.getUid().equals(firebaseAuth.getCurrentUser().getUid())) {
+                        if(userTag.getImageURL() != null) {
+                            Picasso.get().load(userTag.getImageURL()).resize(100,100).centerCrop().into(profileImageView);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //ignore
+            }
+        });
     }
 
     public void showPopupMenu(View view) {
