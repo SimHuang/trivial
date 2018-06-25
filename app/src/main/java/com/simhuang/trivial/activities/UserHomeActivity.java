@@ -112,11 +112,11 @@ public class UserHomeActivity extends AppCompatActivity {
                 UserUtils.retrieveUserProfileData(getSupportFragmentManager());
                 break;
 
-            case R.id.leaderboard:
-                LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
-                fragmentTransaction.replace(R.id.fragment_container, leaderboardFragment);
-                fragmentTransaction.commit();
-                break;
+//            case R.id.leaderboard:
+//                LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
+//                fragmentTransaction.replace(R.id.fragment_container, leaderboardFragment);
+//                fragmentTransaction.commit();
+//                break;
 
             case R.id.friends:
                 UserFriendsFragment userFriendsFragment = new UserFriendsFragment();
@@ -137,47 +137,12 @@ public class UserHomeActivity extends AppCompatActivity {
         }
     }
 
-//    /**
-//     * Retrieves user profile data from the 'User' json node base on the uid.
-//     * The user object is passed into the profile fragment, and the profile fragment is rendered
-//     * on this activity.
-//     */
-//    public void retrieveUserProfileData() {
-//        String uid = mAuth.getCurrentUser().getUid();
-//        mUserReference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-//
-//        mUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//
-//                Bundle args = new Bundle();
-//                args.putInt("token", user.getToken());
-//                args.putInt("gamesWon", user.getGamesWon());
-//                args.putInt("gamesLost", user.getGamesLost());
-//                args.putString("username", user.getUsername());
-//
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                UserProfileFragment userProfileFragment = new UserProfileFragment();
-//                userProfileFragment.setArguments(args);
-//                fragmentTransaction.replace(R.id.fragment_container, userProfileFragment);
-//                fragmentTransaction.commit();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                //IGNORING FAILED DATABASE CALLS FOR NOW
-//            }
-//        });
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        navigationView.setCheckedItem(R.id.profile);
+//        UserUtils.retrieveUserProfileData(getSupportFragmentManager());
 //    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        navigationView.setCheckedItem(R.id.profile);
-        UserUtils.retrieveUserProfileData(getSupportFragmentManager());
-    }
 
     /**
      * Log user out of the app and return to the main
@@ -228,5 +193,10 @@ public class UserHomeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

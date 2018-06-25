@@ -23,10 +23,10 @@
             android:icon="@drawable/ic_search"
             app:showAsAction="always"/>
 
-        <item android:id="@+id/leaderboard"
-            app:showAsAction="always"
-            android:title="Leaderboard"
-            android:icon="@drawable/icon_score"/>
+        <!--<item android:id="@+id/leaderboard"-->
+            <!--app:showAsAction="always"-->
+            <!--android:title="Leaderboard"-->
+            <!--android:icon="@drawable/icon_score"/>-->
 
         <item android:id="@+id/setting"
             app:showAsAction="always"
@@ -35,7 +35,7 @@
 
         <item android:id="@+id/exit"
             app:showAsAction="always"
-            android:title="exit"
+            android:title="Log out"
             android:icon="@drawable/icon_exit"/>
     </group>
 </menu>

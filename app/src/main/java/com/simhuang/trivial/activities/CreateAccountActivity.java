@@ -122,7 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String uid = newlyLoggedInUser.getUid();
         String username = usernameEditText.getText().toString();
         int token = 1000;
-        User user = new User(uid, username, emailEditText.getText().toString(), null, null, null,token,0,0,0);
+        User user = new User(uid, username, emailEditText.getText().toString(), null, null, null, null,token,0,0,0);
         final UserTag newTag = new UserTag(username, uid, null);
 
         mDatabase.child("Users").child(uid).setValue(user);

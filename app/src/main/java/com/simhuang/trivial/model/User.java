@@ -8,6 +8,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String bio;
+    private String imageURI;
     private int token;
     private int gameStreak;
     private int gamesWon;
@@ -15,7 +16,7 @@ public class User {
 
     public User() {}
 
-    public User(String uid, String username, String email, String firstName, String lastName, String bio, int token,
+    public User(String uid, String username, String email, String firstName, String lastName, String bio, String imageURI, int token,
                 int gameStreak, int gamesWon, int gamesLost) {
 
         this.uid = uid;
@@ -24,6 +25,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.bio = bio;
+        this.imageURI = imageURI;
         this.token = token;
         this.gamesLost = gamesLost;
         this.gamesWon = gamesWon;
@@ -76,6 +78,14 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getImageURI() {
+        return imageURI;
+    }
+
+    public void setImageURI(String imageURI) {
+        this.imageURI = imageURI;
     }
 
     public int getToken() {
