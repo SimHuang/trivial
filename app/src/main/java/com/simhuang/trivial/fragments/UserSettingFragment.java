@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +23,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,8 +38,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.simhuang.trivial.R;
 import com.simhuang.trivial.model.User;
+import com.simhuang.trivial.model.UserTag;
 import com.squareup.picasso.Picasso;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -85,17 +93,14 @@ public class UserSettingFragment extends Fragment {
                 switch(item.getItemId()) {
 
                     case R.id.camera_option: //take photo
-                        Toast.makeText(getContext(), "capturing new photo", Toast.LENGTH_SHORT).show();
                         takePhoto(); //TODO:There is a bug with this code requires refactoring
                         return true;
 
                     case R.id.gallery_option: //choose image from gallery
-                        Toast.makeText(getContext(), "gallery", Toast.LENGTH_SHORT).show();
                         choosePhotoFromGallery();
                         return true;
 
                     default:
-                        Toast.makeText(getContext(), "nothing", Toast.LENGTH_SHORT).show();
                         return false;
 
                 }
@@ -144,13 +149,26 @@ public class UserSettingFragment extends Fragment {
      * Upload the image to firebase storage
      */
     public void uploadImagetoFirebase() {
-        StorageReference filepath = storageRef.child(firebaseAuth.getUid()).child(System.currentTimeMillis() + "." + getFileExtension(imageFileURI));
-        filepath.putFile(imageFileURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        final StorageReference filepath = storageRef.child(firebaseAuth.getUid()).child(System.currentTimeMillis() + "." + getFileExtension(imageFileURI));
+        UploadTask uploadTask = filepath.putFile(imageFileURI);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getContext(), "Image Successfully Changed", Toast.LENGTH_SHORT).show();
-                Picasso.get().load(imageFileURI).resize(50,50).centerCrop().into(profileImageView);
-                saveImageURItoDB();
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if(!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return filepath.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Image Successfully Changed", Toast.LENGTH_SHORT).show();
+                    Picasso.get().load(imageFileURI).resize(50,50).centerCrop().into(profileImageView);
+                    String downloadURL = task.getResult().toString();
+                    saveImageURItoDB(downloadURL);
+                }
             }
         });
     }
@@ -159,13 +177,14 @@ public class UserSettingFragment extends Fragment {
      * Store the image uri to firebase database so it can be retrieved
      * for the specific user in the future
      */
-    public void saveImageURItoDB() {
+    public void saveImageURItoDB(final String downloadurl) {
+        //user image url to "User" node
         mDatabase.child("Users").child(firebaseAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
                 if(currentUser != null) {
-                    currentUser.setImageURI(imageFileURI.toString());
+                    currentUser.setImageURI(downloadurl);
                 }
 
                 mDatabase.child("Users").child(firebaseAuth.getUid()).setValue(currentUser);
@@ -173,7 +192,28 @@ public class UserSettingFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                //ignore
+            }
+        });
 
+        //save image to "UserTag" node
+        mDatabase.child("UserTag").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<UserTag> userTagList = new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    UserTag tag = snapshot.getValue(UserTag.class);
+                    if(tag.getUid().equals(firebaseAuth.getCurrentUser().getUid())) {
+                        tag.setImageUR(downloadurl);
+                    }
+                    userTagList.add(tag);
+                }
+                mDatabase.child("UserTag").setValue(userTagList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //ignore
             }
         });
     }

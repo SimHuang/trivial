@@ -40,6 +40,11 @@ public class UserUtils {
                     args.putInt("gamesLost", user.getGamesLost());
                     args.putString("username", user.getUsername());
 
+                    //put the image uri as well if it exist
+                    if(user.getImageURI() != null) {
+                        args.putString("imageURI", user.getImageURI());
+                    }
+
     //                FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     UserProfileFragment userProfileFragment = new UserProfileFragment();

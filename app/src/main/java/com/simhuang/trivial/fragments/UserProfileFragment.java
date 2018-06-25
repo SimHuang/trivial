@@ -1,6 +1,7 @@
 package com.simhuang.trivial.fragments;
 
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.simhuang.trivial.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class UserProfileFragment extends Fragment {
 
@@ -55,6 +60,11 @@ public class UserProfileFragment extends Fragment {
             tokens.setText(Integer.toString(token));
             gamesWon.setText(Integer.toString(won));
             gamesLost.setText(Integer.toString(lost));
+
+            if(args.containsKey("imageURI")) {
+                String imageURL = args.getString("imageURI");
+                Picasso.get().load(imageURL).into(profileImage);
+            }
         }
 
         progressBar.setVisibility(View.INVISIBLE);
