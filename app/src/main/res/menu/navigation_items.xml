@@ -18,10 +18,10 @@
             android:icon="@drawable/icon_group"
             app:showAsAction="always"/>
 
-        <item android:id="@+id/search"
-            android:title="Search"
-            android:icon="@drawable/ic_search"
-            app:showAsAction="always"/>
+        <!--<item android:id="@+id/search"-->
+            <!--android:title="Search"-->
+            <!--android:icon="@drawable/ic_search"-->
+            <!--app:showAsAction="always"/>-->
 
         <!--<item android:id="@+id/leaderboard"-->
             <!--app:showAsAction="always"-->

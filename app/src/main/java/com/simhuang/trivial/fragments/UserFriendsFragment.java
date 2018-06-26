@@ -36,7 +36,7 @@ public class UserFriendsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private List<Friend> friendsList;
     private Context mContext;
-    private FloatingActionButton fab;
+//    private FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -47,17 +47,17 @@ public class UserFriendsFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("User_Friends").child(mAuth.getUid());
 
-        fab = view.findViewById(R.id.fab);
+//        fab = view.findViewById(R.id.fab);
         friendsListRecyclerView = view.findViewById(R.id.user_friends_recycler_view);
         layoutManager = new LinearLayoutManager(view.getContext());
         friendsListRecyclerView.setLayoutManager(layoutManager);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleFABclick();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                handleFABclick();
+//            }
+//        });
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -50,7 +50,7 @@ public class UserSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_search, container, false);
 
         //hide the actionbar for this specific activity
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
         friendSearchRecyclerView = view.findViewById(R.id.friend_search_recycler_view);
         friendSearchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

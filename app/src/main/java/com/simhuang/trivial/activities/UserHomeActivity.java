@@ -1,8 +1,6 @@
 package com.simhuang.trivial.activities;
 
 import android.content.Intent;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,10 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,9 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.simhuang.trivial.R;
 import com.simhuang.trivial.firebaseUtils.UserUtils;
-import com.simhuang.trivial.fragments.LeaderboardFragment;
-import com.simhuang.trivial.fragments.UserFriendsFragment;
-import com.simhuang.trivial.fragments.UserProfileFragment;
+import com.simhuang.trivial.fragments.UserFriendParentFragment;
 import com.simhuang.trivial.fragments.UserSearchFragment;
 import com.simhuang.trivial.fragments.UserSettingFragment;
 import com.simhuang.trivial.model.User;
@@ -138,12 +132,12 @@ public class UserHomeActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
                 break;
 
-            case R.id.search:
-                UserSearchFragment userSearchFragment = new UserSearchFragment();
-                fragmentTransaction.replace(R.id.fragment_container, userSearchFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                break;
+//            case R.id.search:
+//                UserSearchFragment userSearchFragment = new UserSearchFragment();
+//                fragmentTransaction.replace(R.id.fragment_container, userSearchFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                break;
 
             case R.id.profile:
                 UserUtils.retrieveUserProfileData(getSupportFragmentManager());
@@ -156,8 +150,9 @@ public class UserHomeActivity extends AppCompatActivity {
 //                break;
 
             case R.id.friends:
-                UserFriendsFragment userFriendsFragment = new UserFriendsFragment();
-                fragmentTransaction.replace(R.id.fragment_container, userFriendsFragment);
+//                UserFriendsFragment userFriendsFragment = new UserFriendsFragment();
+                UserFriendParentFragment userFriendsParentFragment = new UserFriendParentFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userFriendsParentFragment);
                 fragmentTransaction.commit();
                 break;
 
