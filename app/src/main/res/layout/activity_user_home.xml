@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.UserHomeActivity"
     android:fitsSystemWindows="true"
-    android:background="#E0F2F1">
+    android:background="@color/colorUltrawhite">
 
     <LinearLayout
         android:id="@+id/content_frame"
@@ -20,7 +20,7 @@
             android:id="@+id/home_actionbar"
             android:elevation="4dp"
             android:layout_width="match_parent"
-            app:titleTextColor="#fff"
+            app:titleTextColor="@color/colorUltrawhite"
             android:theme="@style/GeneralActionBar"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -42,6 +42,11 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/navigation_items"
+        app:itemTextColor="#000000"
+        app:itemIconTint="@color/customrPrimaryBlue"
+        android:defaultFocusHighlightEnabled="true"
+        android:background="@color/colorUltrawhite"
+        app:itemBackground="@drawable/drawer_selected_item"
         app:headerLayout="@layout/nagivation_header">
 
     </android.support.design.widget.NavigationView>

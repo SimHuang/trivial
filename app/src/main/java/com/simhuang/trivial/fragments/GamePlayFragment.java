@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -271,6 +272,7 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         if(currentQuestion <= 9) {
             MashapeQuestion newQuestion = questionsList.get(currentQuestion);
             question.setText(newQuestion.getQuestion());
+            question.startAnimation(AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left));
             choiceOneBtn.setText(newQuestion.getChooices().get(0));
             choiceTwoBtn.setText(newQuestion.getChooices().get(1));
 

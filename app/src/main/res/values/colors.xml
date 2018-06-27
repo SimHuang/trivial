@@ -7,4 +7,7 @@
     <color name="colorLightBlue">#dddbf2fa</color>
     <color name="colorDarkSeaGreen">#26d6bc</color>
     <color name="colorUltrawhite">#ffffff</color>
+
+    <color name="customrPrimaryBlue">#1673E6</color>
+    <color name="customDarkerBlue">#1060c1</color>
 </resources>

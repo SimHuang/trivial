@@ -51,7 +51,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(this, "you pressed the back button", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "you pressed the back button", Toast.LENGTH_SHORT).show();
 
         //check which fragment the user is on and act accordingly
     }

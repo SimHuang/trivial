@@ -185,6 +185,7 @@ public class GameOptionsFragment extends Fragment {
         args.putString("gameKey", key);
         gameWaitFragment.setArguments(args);
 
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.fragment_container, gameWaitFragment);
         fragmentTransaction.commit();
     }

@@ -9,7 +9,7 @@
     </style>
     <!-- Action bar theme-->
     <style name="GeneralActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">@color/colorSeaGreen</item>
+        <item name="android:background">@color/customDarkerBlue</item>
     </style>
     <style name="MainActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/colorLightBlue</item>
@@ -34,9 +34,5 @@
     <!-- bottom navigation -->
     <style name="BottomNavigation" >
         <item name="android:background">@color/colorSeaGreen</item>
-    </style>
-    <!-- TextView Items  -->
-    <style>
-
     </style>
 </resources>

@@ -1,10 +1,12 @@
 package com.simhuang.trivial.fragments;
 
+import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.simhuang.trivial.R;
+import com.simhuang.trivial.activities.GameActivity;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -32,6 +35,7 @@ public class UserProfileFragment extends Fragment {
     private TextView tokens;
     private TextView gamesWon;
     private TextView gamesLost;
+    private FloatingActionButton fab;
     private ProgressBar progressBar;
 
     @Nullable
@@ -39,14 +43,15 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
+        fab = (FloatingActionButton) view.findViewById(R.id.playgame_fab);
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         username = (TextView) view.findViewById(R.id.profile_username);
         tokens = (TextView) view.findViewById(R.id.profile_token);
         gamesWon = (TextView) view.findViewById(R.id.profile_gamesWon);
         gamesLost = (TextView) view.findViewById(R.id.profile_gamesLost);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+//        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
 
         Bundle args = getArguments();
         if(args != null) {
@@ -67,8 +72,21 @@ public class UserProfileFragment extends Fragment {
             }
         }
 
-        progressBar.setVisibility(View.INVISIBLE);
+        //go to topic selection screen when user clicks on the fab
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToGameTopicsScreen();
+            }
+        });
+
+//        progressBar.setVisibility(View.INVISIBLE);
 
         return view;
+    }
+
+    public void goToGameTopicsScreen() {
+        Intent intent = new Intent(getContext(), GameActivity.class);
+        startActivity(intent);
     }
 }

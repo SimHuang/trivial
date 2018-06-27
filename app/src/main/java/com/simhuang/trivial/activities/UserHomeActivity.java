@@ -216,10 +216,22 @@ public class UserHomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.setting:
+                navigationView.setCheckedItem(R.id.setting);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                UserSettingFragment userSettingFragment = new UserSettingFragment();
+                fragmentTransaction.replace(R.id.fragment_container, userSettingFragment);
+                fragmentTransaction.commit();
                 return true;
 
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+            //this is actually the log out button
+            case R.id.game:
+                mAuth.signOut();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 return true;
 
             default:

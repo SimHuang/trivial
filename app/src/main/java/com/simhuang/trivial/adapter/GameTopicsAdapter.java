@@ -31,10 +31,12 @@ public class GameTopicsAdapter extends RecyclerView.Adapter<GameTopicsAdapter.Vi
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
+        private TextView comingSoonTxtView;
 
         public ViewHolder(View view) {
             super(view);
             this.textView = view.findViewById(R.id.gameTopic_name);
+            this.comingSoonTxtView = view.findViewById(R.id.coming_soon_text);
         }
     }
 
@@ -73,6 +75,7 @@ public class GameTopicsAdapter extends RecyclerView.Adapter<GameTopicsAdapter.Vi
                 gameOptionsFragment.setArguments(args);
 
                 FragmentTransaction fragmentTransaction = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
                 fragmentTransaction.replace(R.id.fragment_container, gameOptionsFragment);
                 fragmentTransaction.commit();
             }
@@ -90,6 +93,9 @@ public class GameTopicsAdapter extends RecyclerView.Adapter<GameTopicsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull GameTopicsAdapter.ViewHolder holder, int position) {
         holder.textView.setText(gameTopics.get(position));
+        if(gameTopics.get(position).equalsIgnoreCase("random")) {
+            holder.comingSoonTxtView.setVisibility(View.GONE);
+        }
     }
 
     @Override

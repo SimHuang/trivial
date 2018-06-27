@@ -10,5 +10,5 @@
     <item android:id="@+id/game"
         android:title="@string/game"
         app:showAsAction="always"
-        android:icon="@drawable/ic_game"/>
+        android:icon="@drawable/icon_exit"/>
 </menu>

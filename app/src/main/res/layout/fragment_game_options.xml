@@ -4,15 +4,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/topic_label"
-        android:text="Game Topic"
-        android:textSize="20dp"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="10dp"
-        android:textColor="#E2E2E2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <!--<TextView-->
+        <!--android:id="@+id/topic_label"-->
+        <!--android:text="Game Topic"-->
+        <!--android:textSize="20dp"-->
+        <!--android:paddingVertical="10dp"-->
+        <!--android:paddingHorizontal="10dp"-->
+        <!--android:textColor="#E2E2E2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
 
     <TextView
         android:id="@+id/game_topic_textview"
@@ -20,10 +20,21 @@
         android:layout_height="wrap_content"
         android:textSize="35dp"
         android:text="sample text"
-        android:textColor="@color/colorDarkSeaGreen"
+        android:paddingTop="100dp"
+        android:textColor="@color/customDarkerBlue"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/game_bet_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Bet Amount: 200"
+        android:textColor="#ccd7d5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topic_label"/>
+        app:layout_constraintTop_toBottomOf="@+id/game_topic_textview"/>
 
     <Button
         android:id="@+id/start_game_button"

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
+    android:background="@color/customrPrimaryBlue"
     android:id="@+id/game_topics_recyclerView">
 
 </android.support.v7.widget.RecyclerView>
