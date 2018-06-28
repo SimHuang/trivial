@@ -3,6 +3,7 @@ package com.simhuang.trivial.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,6 +55,7 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
     private Button choiceThreeBtn;
     private Button choiceFourBtn;
     private Context mContext;
+    private CountDownTimer countDownTimer;
 
     @Nullable
     @Override
@@ -100,7 +102,7 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
                     }
 
                     questionsList = game.getQuestions();
-                    changeQuestion(currentQuestion);
+                    changeQuestion();
                 }
             }
 
@@ -268,8 +270,31 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
      * Change questions when both user has selected an answer choice
      * or when the timer is up. Update the UI with the new question.
      */
-    public void changeQuestion(int currentQuestion) {
+    public void changeQuestion() {
         if(currentQuestion <= 9) {
+
+            //set a new count down timer when we move on to the next question
+            countDownTimer = new CountDownTimer(10000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timer.setText(Long.toString(millisUntilFinished/1000));
+                }
+
+                @Override
+                public void onFinish() {
+                    //store the wrong user answer and move on to the next question
+                    playerAnswers.add(currentQuestion, false);
+
+                    if(currentQuestion == 9) {
+                        determineWinner();
+
+                    }else {
+                        currentQuestion++;
+                        changeQuestion();                    }
+                }
+
+            }.start();
+
             MashapeQuestion newQuestion = questionsList.get(currentQuestion);
             question.setText(newQuestion.getQuestion());
             question.startAnimation(AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left));
@@ -331,6 +356,11 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
         disableButtonClick();
         String userAnswer = ((Button)v).getText().toString();
         String realAnswer = questionsList.get(currentQuestion).getAnswer();
+
+        if(countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
         if(userAnswer.equals(realAnswer)) {
             playerAnswers.add(currentQuestion, true);
             correctAnswers++;
@@ -344,7 +374,7 @@ public class GamePlayFragment extends Fragment implements View.OnClickListener{
 
         }else {
             currentQuestion++;
-            changeQuestion(currentQuestion);
+            changeQuestion();
         }
     }
 
